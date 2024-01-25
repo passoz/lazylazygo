@@ -90,20 +90,25 @@ func createProject(name string) {
 
 	for _, dir := range directories {
 		os.Mkdir(name+"/"+dir, 0755)
+		fmt.Println("Directory: ", name+"/"+dir, " created")
 	}
 
 	for _, file := range files {
 		os.Create(name + "/" + file)
+		fmt.Println("File: ", name+"/"+file, " created")
 	}
 
 	mainCode := "package main\n\nfunc main () {}\n"
 	writeCode(mainCode, name+"/cmd/api/main.go")
+	fmt.Println("File: ", name+"/cmd/api/main.go", " wrote")
 
 	modCode := "module " + name + "\n\ngo 1.21.6\n"
 	writeCode(modCode, name+"/go.mod")
+	fmt.Println("File: ", name+"/go.mod", " wrote")
 
 	dbCode := "package database\n\nfunc Connect() {}\n"
 	writeCode(dbCode, name+"/internal/database/database.go")
+	fmt.Println("File: ", name+"/internal/database/database.go", " wrote")
 
 	userCode := generateEntity("User", map[string]string{
 		"id":         "string",
@@ -112,6 +117,7 @@ func createProject(name string) {
 		"updated_at": "int64",
 	})
 	writeCode(userCode, name+"/internal/entity/user.go")
+	fmt.Println("File: ", name+"/internal/entity/user.go", " wrote")
 
 	userRepoCode := generateRepository("User",
 		map[string]string{
@@ -126,6 +132,7 @@ func createProject(name string) {
 			"DeleteUser":     "id string",
 		})
 	writeCode(userRepoCode, name+"/internal/repository/user_repository.go")
+	fmt.Println("File: ", name+"/internal/repository/user_repository.go", " wrote")
 
 	userServiceCode := generateService("User",
 		map[string]string{
@@ -140,6 +147,7 @@ func createProject(name string) {
 			"DeleteUser":     "id string",
 		})
 	writeCode(userServiceCode, name+"/internal/service/user_service.go")
+	fmt.Println("File: ", name+"/internal/service/user_service.go", " wrote")
 
 	userControllerCode := generateController("User",
 		map[string]string{
@@ -154,6 +162,7 @@ func createProject(name string) {
 			"DeleteUser":     "id string",
 		})
 	writeCode(userControllerCode, name+"/internal/controller/user_controller.go")
+	fmt.Println("File: ", name+"/internal/controller/user_controller.go", " wrote")
 
 	userHandlerCode := generateHandler("User",
 		map[string]string{
@@ -168,6 +177,7 @@ func createProject(name string) {
 			"DeleteUser":     "id string",
 		})
 	writeCode(userHandlerCode, name+"/internal/handler/user_handler.go")
+	fmt.Println("File: ", name+"/internal/handler/user_handler.go", " wrote")
 
 	identityServiceCode := generateInterface("Identity", map[string]string{
 		"Login":         "email string, password string",
@@ -180,6 +190,7 @@ func createProject(name string) {
 		"ResetPassword": "email string, token string, password string",
 	})
 	writeCode(identityServiceCode, name+"/internal/service/identity_service.go")
+	fmt.Println("File: ", name+"/internal/service/identity_service.go", " wrote")
 
 	authServiceCode := generateService("Auth",
 		map[string]string{
@@ -196,6 +207,7 @@ func createProject(name string) {
 			"ResetPassword": "email string, token string, password string",
 		})
 	writeCode(authServiceCode, name+"/internal/service/auth_service.go")
+	fmt.Println("File: ", name+"/internal/service/auth_service.go", " wrote")
 
 	authControllerCode := generateController("Auth",
 		map[string]string{
@@ -212,6 +224,7 @@ func createProject(name string) {
 			"ResetPassword": "email string, token string, password string",
 		})
 	writeCode(authControllerCode, name+"/internal/controller/auth_controller.go")
+	fmt.Println("File: ", name+"/internal/controller/auth_controller.go", " wrote")
 
 	authHandlerCode := generateHandler("Auth",
 		map[string]string{
@@ -228,21 +241,25 @@ func createProject(name string) {
 			"ResetPassword": "email string, token string, password string",
 		})
 	writeCode(authHandlerCode, name+"/internal/handler/auth_handler.go")
+	fmt.Println("File: ", name+"/internal/handler/auth_handler.go", " wrote")
 
 	authMiddlewareCode := "package middlewares\n\nfunc AuthMiddleware() {}\n"
 	writeCode(authMiddlewareCode, name+"/internal/middleware/auth_middleware.go")
+	fmt.Println("File: ", name+"/internal/middleware/auth_middleware.go", " wrote")
 
 	schemaCode := "drop database if exists " + name + ";\ncreate database " + name + ";\n\n"
 	schemaCode += "create table users (\n\tid text not null,\n\temail varchar(255) not null,\n\tcreated_at integer not null,\n\tupdated_at integer not null,\n\tprimary key (id)\n);\n"
 	writeCode(schemaCode, name+"/internal/database/schema/schema.sql")
+	fmt.Println("File: ", name+"/internal/database/schema/schema.sql", " wrote")
 
 	queryCode := "select * from users;\n"
 	writeCode(queryCode, name+"/internal/database/schema/query.sql")
+	fmt.Println("File: ", name+"/internal/database/schema/query.sql", " wrote")
 
 }
 
 func generateCode() {
-	fmt.Println("Generating code")
+	fmt.Println("Generating code\n")
 }
 
 func writeCode(code string, file string) {
